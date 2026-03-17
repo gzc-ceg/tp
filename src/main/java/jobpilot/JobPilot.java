@@ -89,13 +89,22 @@ public class JobPilot {
      * @param applications The list of job applications to sort.
      */
     public static void sortApplications(ArrayList<Add> applications) {
+        assert applications != null : "applications list cannot be null (sort operation failed)";
+
         if (applications.isEmpty()) {
             System.out.println("No applications to sort!");
             return;
         }
-        Collections.sort(applications);
-        System.out.println("Sorted by submission date!");
-        listApplications(applications);
+
+        try {
+            Collections.sort(applications);
+            System.out.println("Sorted by submission date!");
+            listApplications(applications);
+        } catch (NullPointerException e) {
+            System.out.println("Sort failed: Some applications have invalid submission date (null)");
+        } catch (ClassCastException e) {
+            System.out.println("Sort failed: Applications cannot be sorted (missing Comparable implementation)");
+        }
     }
 
     /**
