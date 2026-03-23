@@ -5,4 +5,5 @@ list
 sort
 delete 1
 list
+search google
 bye

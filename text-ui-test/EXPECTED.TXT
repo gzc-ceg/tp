@@ -6,7 +6,7 @@ Hello from
  \___/  \___/ |____/ |_|    |___||_____| \___/   |_|
 
 Welcome to JobPilot!
-Commands: add | list | sort | status | delete | bye
+Commands: add | list | search | sort | status | delete | bye
 Added: Google | SE manager | 2025-03-10 | Pending
 Added: Amazon | Data Analyst | 2025-03-08 | Pending
 Added: Microsoft | SDE Intern | 2025-03-12 | Pending
@@ -25,4 +25,6 @@ You have 2 application(s) left.
 Here are your applications:
 1. Google | SE manager | 2025-03-10 | Pending
 2. Microsoft | SDE Intern | 2025-03-12 | Pending
+Found 1 application(s) matching 'google':
+1. Google | SE manager | 2025-03-10 | Pending
 Bye! You added 2 application(s).
