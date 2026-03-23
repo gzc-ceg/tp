@@ -3,6 +3,7 @@ package jobpilot;
 import exception.JobPilotException;
 import task.Add;
 import task.Delete;
+import task.IndustryTag; 
 
 import java.time.format.DateTimeParseException;
 import java.util.Collections;
@@ -108,7 +109,7 @@ public class JobPilot {
     }
 
     /**
-     * Updates the status and note of an existing application.
+     * Updates the status and note of an existing application (separated fields).
      *
      * @param applications The list containing job applications.
      * @param input        The raw user command string.
@@ -145,7 +146,9 @@ public class JobPilot {
             Add app = applications.get(listIndex);
             assert app != null : "Retrieved application at index " + listIndex + " should not be null";
 
-            app.setStatus(newStatus + " (Note: " + note + ")");
+            app.setStatus(newStatus);
+            app.setNotes(note);
+
             LOGGER.log(Level.INFO, "Successfully updated status for application at index " + listIndex);
             System.out.println("Updated Status: " + app);
 
@@ -158,17 +161,57 @@ public class JobPilot {
     }
 
     /**
-     * Deletes an application from the list.
+     * Adds/removes industry tags to/from a job application.
+     * Command format: tag INDEX add/TAG or tag INDEX remove/TAG
      *
-     * @param input        The full user command.
-     * @param applications The list storing all job applications.
-     * @throws JobPilotException If the index provided is invalid.
+     * @param applications The list of job applications.
+     * @param input        The raw user command string.
+     * @throws JobPilotException If there's an error in the command format.
      */
-    private static void deleteApplication(String input, ArrayList<Add> applications) throws JobPilotException {
+    public static void tagApplication(ArrayList<Add> applications, String input) throws JobPilotException {
+        assert applications != null : "Applications list should not be null";
+        assert input != null : "Input command string should not be null";
+        assert input.startsWith("tag ") : "Input must start with 'tag ' prefix";
+
+        LOGGER.log(Level.INFO, "Attempting to tag application with input: " + input);
+
         try {
-            Delete.deleteApplication(input, applications);
+            int addIndex = input.indexOf(" add/");
+            int removeIndex = input.indexOf(" remove/");
+            boolean isAdd = addIndex != -1;
+
+            if (!isAdd && removeIndex == -1) {
+                throw new JobPilotException("Invalid format! Use: tag INDEX add/TAG or tag INDEX remove/TAG");
+            }
+
+            int commandIndex = isAdd ? addIndex : removeIndex;
+            String indexStr = input.substring("tag ".length(), commandIndex).trim();
+            int listIndex = Integer.parseInt(indexStr) - 1;
+
+            if (listIndex < 0 || listIndex >= applications.size()) {
+                throw new JobPilotException("Invalid index! Application not found.");
+            }
+
+            int tagStartIndex = commandIndex + (isAdd ? 5 : 7);
+            String tagStr = input.substring(tagStartIndex).trim();
+            IndustryTag tag = new IndustryTag(tagStr);
+
+            Add app = applications.get(listIndex);
+            if (isAdd) {
+                app.addIndustryTag(tag);
+                LOGGER.log(Level.INFO, "Added tag " + tag + " to application at index " + listIndex);
+                System.out.println("Added tag: " + tag + " ->" + app);
+            } else {
+                app.removeIndustryTag(tag);
+                LOGGER.log(Level.INFO, "Removed tag " + tag + " from application at index " + listIndex);
+                System.out.println("Removed tag: " + tag + " ->" + app);
+            }
+
         } catch (NumberFormatException e) {
-            throw new JobPilotException("Invalid format! Use: delete INDEX");
+            throw new JobPilotException("Invalid format! Index must be a number. Use: tag INDEX add/TAG");
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Unexpected error during tag operation", e);
+            throw new JobPilotException("Failed to update tags: " + e.getMessage());
         }
     }
 
@@ -246,7 +289,7 @@ public class JobPilot {
 
         System.out.println("Hello from\n" + logo);
         System.out.println("Welcome to JobPilot!");
-        System.out.println("Commands: add | list | search | sort | status | delete | bye");
+        System.out.println("Commands: add | list | search | sort | status | tag | delete | bye");
 
         Scanner in = new Scanner(System.in);
         ArrayList<Add> applications = new ArrayList<>();
@@ -271,6 +314,12 @@ public class JobPilot {
                 sortApplications(applications);
             } else if (input.startsWith("status ")) {
                 updateStatus(applications, input);
+            } else if (input.startsWith("tag ")) {
+                try {
+                    tagApplication(applications, input);
+                } catch (JobPilotException e) {
+                    System.out.println(e.getMessage());
+                }
             } else if (input.startsWith("delete")) {
                 try {
                     deleteApplication(input, applications);
@@ -278,11 +327,24 @@ public class JobPilot {
                     System.out.println(e.getMessage());
                 }
             } else {
-                System.out.println("Unknown command. Use: add | list | search | sort | status | delete | bye");
+                System.out.println("Unknown command. Use: add | list | search | sort | status | tag | delete | bye");
             }
         }
         in.close();
     }
+
+    /**
+     * Helper to delete an application from the list.
+     *
+     * @param input        The full user command.
+     * @param applications The list storing all job applications.
+     * @throws JobPilotException If the index provided is invalid.
+     */
+    private static void deleteApplication(String input, ArrayList<Add> applications) throws JobPilotException {
+        try {
+            Delete.deleteApplication(input, applications);
+        } catch (NumberFormatException e) {
+            throw new JobPilotException("Invalid format! Use: delete INDEX");
+        }
+    }
 }
-
-

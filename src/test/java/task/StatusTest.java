@@ -22,7 +22,8 @@ class StatusTest {
 
         JobPilot.updateStatus(applications, "status 1 set/OFFER note/Great news");
 
-        assertEquals("OFFER (Note: Great news)", applications.get(0).getStatus());
+        assertEquals("OFFER", applications.get(0).getStatus());
+        assertEquals("Great news", applications.get(0).getNotes());
     }
 
     @Test
@@ -32,6 +33,8 @@ class StatusTest {
 
         JobPilot.updateStatus(applications, "status 1 wrong_format");
 
+        assertEquals("Pending", applications.get(0).getStatus());
+        assertEquals("", applications.get(0).getNotes());
         assertEquals(1, applications.size());
     }
 }
