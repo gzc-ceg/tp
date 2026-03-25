@@ -1,10 +1,7 @@
 package jobpilot;
 
 import exception.JobPilotException;
-import task.Add;
-import task.Delete;
-import task.Help;
-import task.IndustryTag;
+import task.*;
 
 import java.time.format.DateTimeParseException;
 import java.util.Collections;
@@ -326,6 +323,12 @@ public class JobPilot {
             } else if (input.startsWith("delete")) {
                 try {
                     deleteApplication(input, applications);
+                } catch (JobPilotException e) {
+                    System.out.println(e.getMessage());
+                }
+            } else if (input.startsWith("edit")) {
+                try {
+                    Edit.editApplication(input, applications);
                 } catch (JobPilotException e) {
                     System.out.println(e.getMessage());
                 }
