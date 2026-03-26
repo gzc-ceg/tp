@@ -2,7 +2,8 @@ package app;
 
 import parser.Parser;
 import parser.ParsedCommand;
-import task.*;
+import storage.Storage;
+import task.Application;
 import ui.Ui;
 
 import java.util.ArrayList;
@@ -17,16 +18,19 @@ public class JobPilot {
     private static final Logger LOGGER = Logger.getLogger(JobPilot.class.getName());
 
     public static void main(String[] args) {
-        LOGGER.setLevel(Level.OFF);
+        LOGGER.setLevel(Level.INFO);
 
         Ui.showWelcome();
-        ArrayList<Application> applications = new ArrayList<>();
+        Storage storage = new Storage();
+        ArrayList<Application> applications = storage.loadFromFile();
         CommandRunner runner = new CommandRunner(applications);
 
         while (true) {
             String input = Ui.readCommand();
             ParsedCommand cmd = Parser.parse(input);
             boolean shouldContinue = runner.run(cmd);
+
+            storage.saveToFile(applications);
 
             if (!shouldContinue) {
                 break;
