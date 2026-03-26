@@ -37,10 +37,8 @@ public class Filterer {
 
         if (filteredResults.isEmpty()) {
             LOGGER.log(Level.WARNING, "No matches found for status: " + statusQuery);
-            ui.showMessage("No applications found with status matching: " + statusQuery);
-        } else {
-            ui.showMessage("Found " + filteredResults.size() + " matching application(s):");
-            ui.showApplicationList(filteredResults);
         }
+
+        Ui.showFilterResults(filteredResults, statusQuery);
     }
 }
