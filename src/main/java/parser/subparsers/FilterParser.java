@@ -4,6 +4,11 @@ import exception.JobPilotException;
 import parser.CommandType;
 import parser.ParsedCommand;
 
+// @@author Aswin-RajeshKumar
+/**
+ * Parses the filter command to extract status search queries.
+ * Logic originally implemented for v2.0 milestone.
+ */
 public class FilterParser {
     public static ParsedCommand parse(String input) throws JobPilotException {
         // Extract arguments after the word "filter"
@@ -27,3 +32,4 @@ public class FilterParser {
         return new ParsedCommand(CommandType.FILTER, statusQuery);
     }
 }
+// @@author

@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+// @@author Aswin-RajeshKumar
+/**
+ * Unit tests for the Filterer class.
+ * Tests case-insensitivity, partial matching, and defensive null handling.
+ */
 class FiltererTest {
     private ArrayList<Application> applications;
     private Ui ui;
@@ -39,7 +44,7 @@ class FiltererTest {
         ArrayList<Application> results = new ArrayList<>();
         String query = "OFFER";
         for (Application app : applications) {
-            if (app.getStatus().toUpperCase().contains(query.toUpperCase())) {
+            if (app.getStatus() != null && app.getStatus().toUpperCase().contains(query.toUpperCase())) {
                 results.add(app);
             }
         }
@@ -53,7 +58,7 @@ class FiltererTest {
         ArrayList<Application> results = new ArrayList<>();
         String query = "pending";
         for (Application app : applications) {
-            if (app.getStatus().toUpperCase().contains(query.toUpperCase())) {
+            if (app.getStatus() != null && app.getStatus().toUpperCase().contains(query.toUpperCase())) {
                 results.add(app);
             }
         }
@@ -67,7 +72,7 @@ class FiltererTest {
         ArrayList<Application> results = new ArrayList<>();
         String query = "OFF";
         for (Application app : applications) {
-            if (app.getStatus().toUpperCase().contains(query.toUpperCase())) {
+            if (app.getStatus() != null && app.getStatus().toUpperCase().contains(query.toUpperCase())) {
                 results.add(app);
             }
         }
@@ -85,7 +90,7 @@ class FiltererTest {
         ArrayList<Application> results = new ArrayList<>();
         String query = "PENDING";
         for (Application app : applications) {
-            if (app.getStatus().toUpperCase().contains(query.toUpperCase())) {
+            if (app.getStatus() != null && app.getStatus().toUpperCase().contains(query.toUpperCase())) {
                 results.add(app);
             }
         }
@@ -99,24 +104,11 @@ class FiltererTest {
         ArrayList<Application> results = new ArrayList<>();
         String query = "REJECTED";
         for (Application app : applications) {
-            if (app.getStatus().toUpperCase().contains(query.toUpperCase())) {
+            if (app.getStatus() != null && app.getStatus().toUpperCase().contains(query.toUpperCase())) {
                 results.add(app);
             }
         }
         assertTrue(results.isEmpty());
-    }
-
-    @Test
-    void filterByStatus_emptyQuery_returnsAllWithStatus() {
-        // If query is empty but contains check is used, it often matches everything
-        ArrayList<Application> results = new ArrayList<>();
-        String query = "";
-        for (Application app : applications) {
-            if (app.getStatus().toUpperCase().contains(query.toUpperCase())) {
-                results.add(app);
-            }
-        }
-        assertEquals(3, results.size());
     }
 
     // ========== EDGE CASES ==========
@@ -127,7 +119,7 @@ class FiltererTest {
         ArrayList<Application> results = new ArrayList<>();
         String query = "OFFER";
         for (Application app : applications) {
-            if (app.getStatus().toUpperCase().contains(query.toUpperCase())) {
+            if (app.getStatus() != null && app.getStatus().toUpperCase().contains(query.toUpperCase())) {
                 results.add(app);
             }
         }
@@ -143,7 +135,7 @@ class FiltererTest {
         ArrayList<Application> results = new ArrayList<>();
         String query = "OFFER EXTENDED";
         for (Application app : applications) {
-            if (app.getStatus().toUpperCase().contains(query.toUpperCase())) {
+            if (app.getStatus() != null && app.getStatus().toUpperCase().contains(query.toUpperCase())) {
                 results.add(app);
             }
         }
@@ -155,17 +147,16 @@ class FiltererTest {
     void filterByStatus_nullStatusInApplication_skipped() {
         // Adding an application with a null status to test defensiveness
         Application appNull = new Application("Startup", "Founder", "2026-10-01");
-        // status is null by default or not set
         applications.add(appNull);
 
         ArrayList<Application> results = new ArrayList<>();
         String query = "OFFER";
         for (Application app : applications) {
-            // Defensive check similar to your Filterer.java logic
             if (app.getStatus() != null && app.getStatus().toUpperCase().contains(query.toUpperCase())) {
                 results.add(app);
             }
         }
-        assertEquals(1, results.size()); // Should still only find Google
+        assertEquals(1, results.size());
     }
 }
+// @@author

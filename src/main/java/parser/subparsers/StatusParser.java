@@ -3,6 +3,7 @@ package parser.subparsers;
 import exception.JobPilotException;
 import parser.ParsedCommand;
 
+// @@author Aswin-RajeshKumar
 /**
  * Parses the status command.
  * Format: status INDEX set/STATUS note/NOTE
@@ -31,3 +32,4 @@ public class StatusParser {
         return new ParsedCommand(listIndex, newStatus, note);
     }
 }
+// @@author

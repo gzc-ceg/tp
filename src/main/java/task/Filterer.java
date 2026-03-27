@@ -5,8 +5,13 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+// @@author Aswin-RajeshKumar
+/**
+ * Utility class to handle filtering of job applications.
+ * Implemented for v2.0 milestone.
+ */
 public class Filterer {
-    // V2.0 REQUIREMENT: Logging
+
     private static final Logger LOGGER = Logger.getLogger(Filterer.class.getName());
 
     /**
@@ -42,3 +47,4 @@ public class Filterer {
         Ui.showFilterResults(filteredResults, statusQuery);
     }
 }
+// @@author

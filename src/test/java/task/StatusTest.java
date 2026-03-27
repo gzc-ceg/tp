@@ -1,7 +1,6 @@
 package task;
 
 import app.CommandRunner;
-import exception.JobPilotException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import parser.ParsedCommand;
@@ -10,8 +9,11 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// @@author Aswin-RajeshKumar
 /**
- * Unit tests for updating application status using CommandRunner and ParsedCommand.
+ * Unit tests for the Status and Notes update feature.
+ * Original test cases and boundary value analysis (BVA) authored for v2.0.
+ * Refactored to integrate with the CommandRunner architecture.
  */
 class StatusTest {
 
@@ -24,6 +26,7 @@ class StatusTest {
         applications = new ArrayList<>();
         runner = new CommandRunner(applications);
 
+        // Initializing a standard test application
         testApp = new Application("Google", "SWE", "2026-03-01");
         applications.add(testApp);
     }
@@ -51,21 +54,22 @@ class StatusTest {
 
     @Test
     void statusCommand_updateNotesOnly_success() {
+        // Logic to verify that notes can be updated while status remains unchanged
         ParsedCommand cmd = new ParsedCommand(0, testApp.getStatus(), "Updated note");
         runner.run(cmd);
 
-        assertEquals(testApp.getStatus(), testApp.getStatus());
+        assertEquals("Pending", testApp.getStatus()); // Default status
         assertEquals("Updated note", testApp.getNotes());
     }
 
-    // ================= ERROR CASES =================
+    // ================= ERROR CASES (BVA) =================
 
     @Test
     void statusCommand_invalidNegativeIndex_showsError() {
+        // Boundary test: Negative index should not crash or modify data
         ParsedCommand cmd = new ParsedCommand(-1, "OFFER", "Note");
         boolean continueFlag = runner.run(cmd);
 
-        // Status and notes should remain unchanged
         assertTrue(continueFlag);
         assertEquals("Pending", testApp.getStatus());
         assertEquals("", testApp.getNotes());
@@ -73,6 +77,7 @@ class StatusTest {
 
     @Test
     void statusCommand_indexTooLarge_showsError() {
+        // Boundary test: Index exceeding list size
         ParsedCommand cmd = new ParsedCommand(5, "OFFER", "Note");
         runner.run(cmd);
 
@@ -80,3 +85,4 @@ class StatusTest {
         assertEquals("", testApp.getNotes());
     }
 }
+// @@author
