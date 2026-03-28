@@ -2,32 +2,78 @@
 
 ## Introduction
 
-{Give a product intro}
+JobPilot is an application designed to help computing students manage their job applications efficiently. It works through a Command Line Interface (CLI), but still provides the convenience of a simple graphical interface. 
+By using JobPilot, users can track application progress and important details without the hassle of manual lists or spreadsheets.
 
 ## Quick Start
 
-{Give steps to get started quickly}
-
-1. Ensure that you have Java 17 or above installed.
-1. Down the latest version of `Duke` from [here](http://link.to/duke).
+1. **Install Java 17+:** Verify that your computer has Java `17` or a newer version installed. <br>
+   *Mac users:* Please follow the specific JDK installation guide [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+2. **Download the App:** Grab the latest `.jar` release file from [here]().
+3. **Set Up Your Directory:** Move the downloaded file into a dedicated new folder. (Note: Running the app for the first time will automatically generate a `data/JobPilotData.txt` file in this directory to save your tasks).
+4. **Launch JobPilot** Open your terminal and run the app with the following command: `java -jar <release-name>.jar`
 
 ## Features 
 
 {Give detailed description of each feature}
 
-### Adding a todo: `todo`
-Adds a new item to the list of todo items.
+### Viewing help message: `help`
+Shows a message explaining the available commands in JobPilot.
 
-Format: `todo n/TODO_NAME d/DEADLINE`
+Format: `help`
 
-* The `DEADLINE` can be in a natural language format.
-* The `TODO_NAME` cannot contain punctuation.  
+Example output:
 
-Example of usage: 
+```text
+Available Commands:
+add c/COMPANY p/POSITION d/DATE                             Add a new job application
+edit INDEX [c/COMPANY] [p/POSITION] [d/DATE] [s/STATUS]     Edit existing application
+delete INDEX                                                Delete an application
+status INDEX set/STATUS note/NOTE                           Update  application status and add a note
+filter status/STATUS                                        Filter applications by status
+tag INDEX add/TAG                                           Add a tag to an application
+tag INDEX remove/TAG                                        Remove a tag from an application
+list                                                        List all job applications
+sort                                                        Sort applications by date
+search COMPANY_NAME                                         Search applications by company name
+help                                                        Show this message
+bye                                                         Exit the application
+```
 
-`todo n/Write the rest of the User Guide d/next week`
+### Deleting an application: `delete`
+Deletes the specified application from JobPilot.
 
-`todo n/Refactor the User Guide to remove passive voice d/13/04/2020`
+Format: delete INDEX
+
+- Deletes the application at the specified INDEX.
+- The index refers to the index number shown in the displayed application list though the list command.
+- The index must be a positive integer 1, 2, 3, ...
+
+Examples:
+- `delete 1`
+- `list` followed by `delete 2`
+
+Example output:
+```text
+Deleted application:
+Google | SE manager | 2025-03-10 | INTERVIEW
+You have 4 application(s) left.
+```
+
+### Exiting the program: bye
+
+Exits JobPilot and saves the application data to a readable text file.
+
+Format: `bye`
+
+Examples:
+- `bye`
+
+Example output:
+
+```text
+Bye! You added 4 application(s).
+```
 
 ## FAQ
 
@@ -39,4 +85,8 @@ Example of usage:
 
 {Give a 'cheat sheet' of commands here}
 
-* Add todo `todo n/TODO_NAME d/DEADLINE`
+| Action | Format, Examples |
+|--------|----------------|
+| Delete | `delete INDEX` <br> e.g., `delete 1` |
+| Help   | `help` |
+| Exit   | `bye` |
