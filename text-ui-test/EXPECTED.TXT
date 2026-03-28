@@ -16,13 +16,14 @@ You have 0 application(s) left.
 Available Commands:
 add c/COMPANY p/POSITION d/DATE                             Add a new job application
 edit INDEX [c/COMPANY] [p/POSITION] [d/DATE] [s/STATUS]     Edit existing application
-list                                                        List all job applications
 delete INDEX                                                Delete an application
-sort                                                        Sort applications by date
-search COMPANY_NAME                                         Search applications by company name
-status INDEX set/STATUS note/NOTE                           Update application status and add a note
+status INDEX set/STATUS note/NOTE                           Update  application status and add a note
+filter status/STATUS                                        Filter applications by status
 tag INDEX add/TAG                                           Add a tag to an application
 tag INDEX remove/TAG                                        Remove a tag from an application
+list                                                        List all job applications
+sort                                                        Sort applications by date
+search COMPANY_NAME                                         Search applications by company name
 help                                                        Show this message
 bye                                                         Exit the application
 
