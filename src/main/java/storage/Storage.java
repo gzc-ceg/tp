@@ -31,6 +31,7 @@ public class Storage {
      */
     public Storage() {
         jobPilotDataFile = FILE_PATH.toFile();
+        LOGGER.setLevel(Level.SEVERE);
 
         try {
             File parentDir = jobPilotDataFile.getParentFile();
@@ -57,6 +58,7 @@ public class Storage {
 
         try {
             Scanner scanner = new Scanner(jobPilotDataFile);
+
             LOGGER.log(Level.INFO, "Loading data from " + FILE_PATH);
 
             while (scanner.hasNextLine()) {
