@@ -12,11 +12,13 @@ import java.util.Collections;
  */
 
 public class Application implements Comparable<Application> {
+
     private String company;
     private String position;
     private LocalDate date;
     private String status;
     private String notes;
+    private Set<IndustryTag> industryTags = new HashSet<>();
 
     public Application(String company, String position, String date) throws DateTimeParseException {
         assert company != null: "Company cannot be null" ;
@@ -124,7 +126,6 @@ public class Application implements Comparable<Application> {
 
         return company + " | " + position + " | " + getDate() + " | " + status + noteDisplay + tagDisplay;
     }
-    private Set<IndustryTag> industryTags = new HashSet<>();
 
     public void addIndustryTag(IndustryTag tag) {
         assert tag != null : "Tag cannot be null";
