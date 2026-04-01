@@ -42,8 +42,7 @@ public class SearchTest {
     void search_noMatches_displaysErrorMessage() {
         applications.add(new Application("Google", "SE", "2025-01-10"));
 
-        // Fixed: Use the (CommandType, String) constructor
-        runner.run(new ParsedCommand(CommandType.SEARCH, "Microsoft"));
+        runner.run(new ParsedCommand("c", "microsoft"));
 
         String output = outContent.toString();
         assertTrue(output.contains("No applications found"), "Should notify user when no match exists");
@@ -54,8 +53,7 @@ public class SearchTest {
         applications.add(new Application("Google", "SE", "2025-01-10"));
         applications.add(new Application("GoGo", "PM", "2025-02-10"));
 
-        // Fixed: Use the (CommandType, String) constructor
-        runner.run(new ParsedCommand(CommandType.SEARCH, "Go"));
+        runner.run(new ParsedCommand("c", "go"));
 
         String output = outContent.toString();
         assertTrue(output.contains("Google"), "Should find Google for query 'Go'");
@@ -66,9 +64,39 @@ public class SearchTest {
     void search_caseInsensitive_ignoresCasing() {
         applications.add(new Application("Google", "SE", "2025-01-10"));
 
-        runner.run(new ParsedCommand(CommandType.SEARCH, "GOOGLE"));
+        runner.run(new ParsedCommand("c", "GOOGLE"));
 
         String output = outContent.toString();
         assertTrue(output.contains("Google"), "Search should be case-insensitive");
+    }
+
+    @Test
+    void search_byPosition() {
+        applications.add(new Application("Google", "Intern", "2025-01-10"));
+        applications.add(new Application("Amazon", "Manager", "2025-02-10"));
+
+        runner.run(new ParsedCommand("p", "intern"));
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Google"));
+        assertFalse(output.contains("Amazon"));
+    }
+
+    @Test
+    void search_byStatus() {
+        Application app1 = new Application("Google", "SE", "2025-01-10");
+        app1.setStatus("Accepted");
+
+        Application app2 = new Application("Amazon", "SE", "2025-02-10");
+        app2.setStatus("Pending");
+
+        applications.add(app1);
+        applications.add(app2);
+
+        runner.run(new ParsedCommand("s", "accepted"));
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Google"));
+        assertFalse(output.contains("Amazon"));
     }
 }

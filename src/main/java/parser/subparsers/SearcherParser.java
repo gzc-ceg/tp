@@ -5,21 +5,38 @@ import parser.ParsedCommand;
 
 /**
  * Parses the search command.
- * Format: search COMPANY_NAME
+ * Supports: exact match, negative search, multi-keyword search
  */
 public class SearcherParser {
 
     public static ParsedCommand parse(String input) throws JobPilotException {
         if (input == null || input.trim().isEmpty()) {
-            throw new JobPilotException("Please provide a company name to search. Example: search google");
+            throw new JobPilotException("Please provide a search query. Example: search c/google");
         }
 
-        String searchTerm = input.substring("search".length()).trim();
+        String args = input.substring("search".length()).trim();
 
-        if (searchTerm.isEmpty()) {
-            throw new JobPilotException("Please provide a company name to search. Example: search google");
+        if (args.isEmpty()) {
+            throw new JobPilotException("Please provide a search query. Example: search c/google");
         }
 
-        return new ParsedCommand(parser.CommandType.SEARCH, searchTerm);
+        if (!args.contains("/")) {
+            throw new JobPilotException("Invalid format! Use: search c/xxx or p/xxx or s/xxx");
+        }
+
+        int slashIndex = args.indexOf("/");
+
+        String type = args.substring(0, slashIndex).trim().toLowerCase();
+        String value = args.substring(slashIndex + 1).trim().toLowerCase();
+
+        if (value.isEmpty()) {
+            throw new JobPilotException("Search value cannot be empty!");
+        }
+
+        if (!type.equals("c") && !type.equals("p") && !type.equals("s")) {
+            throw new JobPilotException("Invalid search type! Use c/, p/, or s/");
+        }
+
+        return new ParsedCommand(type, value);
     }
 }

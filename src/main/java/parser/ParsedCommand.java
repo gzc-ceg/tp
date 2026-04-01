@@ -2,7 +2,6 @@ package parser;
 
 import task.IndustryTag;
 
-// @@author Aswin-RajeshKumar
 /**
  * Represents a command that has been parsed from raw user input.
  * It carries the necessary data to the CommandRunner for execution.
@@ -21,6 +20,7 @@ public class ParsedCommand {
 
     // Search & Filter Fields
     private String searchTerm;
+    public final String searchType;
 
     // Status & Notes Fields
     private String statusValue;
@@ -44,6 +44,7 @@ public class ParsedCommand {
     public ParsedCommand(CommandType type) {
         this.type = type;
         this.errorMessage = null;
+        this.searchType = null;
     }
 
     /**
@@ -51,7 +52,11 @@ public class ParsedCommand {
      */
     public ParsedCommand(CommandType type, String stringValue) {
         this.type = type;
-        if (type == CommandType.ERROR) {
+        this.searchType = null;
+        if (type == CommandType.FILTER || type == CommandType.SEARCH) {
+            this.searchTerm = stringValue;
+            this.errorMessage = null;
+        } else if (type == CommandType.ERROR) {
             this.errorMessage = stringValue;
             this.searchTerm = null;
         } else {
@@ -69,6 +74,7 @@ public class ParsedCommand {
         this.position = position;
         this.date = date;
         this.errorMessage = null;
+        this.searchType = null;
     }
 
     /**
@@ -78,6 +84,7 @@ public class ParsedCommand {
         this.type = CommandType.DELETE;
         this.index = index;
         this.errorMessage = null;
+        this.searchType = null;
     }
 
     /**
@@ -91,10 +98,21 @@ public class ParsedCommand {
         this.newDate = date;
         this.newStatus = status;
         this.errorMessage = null;
+        this.searchType = null;
     }
 
     /**
-     * Constructor for STATUS command (Status and Note separation).
+     * Constructor for SEARCH command (Merged from master).
+     */
+    public ParsedCommand(String searchType, String searchTerm) {
+        this.type = CommandType.SEARCH;
+        this.searchType = searchType;
+        this.searchTerm = searchTerm;
+        this.errorMessage = null;
+    }
+
+    /**
+     * Constructor for STATUS command.
      */
     public ParsedCommand(int index, String status, String note) {
         this.type = CommandType.STATUS;
@@ -102,6 +120,7 @@ public class ParsedCommand {
         this.statusValue = status;
         this.note = note;
         this.errorMessage = null;
+        this.searchType = null;
     }
 
     /**
@@ -113,6 +132,7 @@ public class ParsedCommand {
         this.tag = tag;
         this.isAddTag = isAdd;
         this.errorMessage = null;
+        this.searchType = null;
     }
 
     // ========== GETTERS ==========
@@ -143,6 +163,10 @@ public class ParsedCommand {
 
     public String getSearchTerm() {
         return searchTerm;
+    }
+
+    public String getSearchType() {
+        return searchType;
     }
 
     public String getStatusValue() {
@@ -177,4 +201,3 @@ public class ParsedCommand {
         return newStatus;
     }
 }
-// @@author

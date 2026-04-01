@@ -2,10 +2,12 @@ package app;
 
 import exception.JobPilotException;
 import parser.ParsedCommand;
+import parser.CommandType;
 import task.Application;
 import task.Deleter;
 import task.Editor;
 import task.Filterer;
+import task.IndustryTag;
 import ui.Ui;
 
 import java.time.format.DateTimeParseException;
@@ -13,26 +15,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Executes parsed commands and applies them to the application list.
+ * Executes parsed commands and manages application flow.
  */
 public class CommandRunner {
 
     private final ArrayList<Application> applications;
 
-    /**
-     * Initializes the command runner with the application list.
-     */
     public CommandRunner(ArrayList<Application> applications) {
         this.applications = applications;
     }
 
-    /**
-     * Runs a parsed command.
-     *
-     * @return true to continue, false to exit the program
-     */
     public boolean run(ParsedCommand cmd) {
-        // Updated to use Getter: getType()
+        if (cmd == null) {
+            return true;
+        }
+
         switch (cmd.getType()) {
 
         case BYE:
@@ -46,7 +43,6 @@ public class CommandRunner {
 
         case ADD:
             try {
-                // Updated to use Getters: getCompany(), getPosition(), getDate()
                 Application newApp = new Application(cmd.getCompany(), cmd.getPosition(), cmd.getDate());
                 applications.add(newApp);
                 Ui.showApplicationAdded(newApp);
@@ -61,7 +57,6 @@ public class CommandRunner {
 
         case DELETE:
             try {
-                // Updated to use Getter: getIndex()
                 Application removed = Deleter.deleteApplication(applications, cmd.getIndex());
                 Ui.showApplicationDeleted(removed, applications.size());
             } catch (JobPilotException e) {
@@ -71,7 +66,6 @@ public class CommandRunner {
 
         case EDIT:
             try {
-                // Updated to use Getters for Edit fields
                 Editor.editApplication(cmd.getIndex(), applications,
                         cmd.getNewCompany(), cmd.getNewPosition(), cmd.getNewDate(), cmd.getNewStatus());
             } catch (JobPilotException e) {
@@ -80,8 +74,12 @@ public class CommandRunner {
             break;
 
         case FILTER:
-            // Updated to use Getter: getSearchTerm()
-            Filterer.filterByStatus(applications, cmd.getSearchTerm(), null);
+            try {
+                // Combined your logic with the team's Filterer signature
+                Filterer.filterByStatus(applications, cmd.getSearchTerm());
+            } catch (JobPilotException e) {
+                Ui.showError(e.getMessage());
+            }
             break;
 
         case SORT:
@@ -103,7 +101,6 @@ public class CommandRunner {
             break;
 
         case ERROR:
-            // Updated to use Getter: getErrorMessage()
             Ui.showError(cmd.getErrorMessage());
             break;
 
@@ -126,7 +123,6 @@ public class CommandRunner {
 
         Application app = applications.get(idx);
 
-        // Defensive check: Only update if the specific field was provided in the command
         if (cmd.getStatusValue() != null) {
             app.setStatus(cmd.getStatusValue());
         }

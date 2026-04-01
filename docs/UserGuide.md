@@ -158,22 +158,38 @@ Here are your applications:
 ```
 
 ### Searching Applications
-Searches job applications by matching a company name
-using a **case-insensitive partial search**.
+- Searches job applications by matching the company name
+  or the position or the current status
+- Uses a **case-insensitive partial search**.
 
-Format: `search COMPANY_NAME`
+Format:
+- `search c/COMPANY_NAME`
+- `search p/POSITION`
+- `search s/STATUS`
 
 Examples:
-- `search Google`
+- `search c/Google`
 ```text
-Found 1 application(s) matching 'Google':
+Found 1 application(s) matching 'c/google':
 1. Google | SE manager | 2025-03-10 | OFFER (Note: Negotiate salary) | Tags: [TECH]
 ```
 
-- `search micro`
+- `search c/micro`
 ```text
-Found 1 application(s) matching 'micro':
+Found 1 application(s) matching 'c/micro':
 1. Microsoft | SDE Intern | 2025-03-12 | PENDING (Note: Waiting for reply) | Tags: [TECH, INTERN]
+```
+
+- `search p/intern`
+```text
+Found 1 application(s) matching 'p/intern':
+1. Microsoft | SDE Intern | 2025-03-12 | PENDING (Note: Waiting for reply) | Tags: [TECH, INTERN]
+```
+
+- `search s/offer`
+```text
+Found 1 application(s) matching 's/offer':
+1. Google | SE manager | 2025-03-10 | OFFER (Note: Negotiate salary) | Tags: [TECH]
 ```
 
 ### Exiting the program: bye
