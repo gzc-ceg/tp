@@ -34,8 +34,12 @@ public class CommandRunner {
         switch (cmd.type) {
 
             case BYE:
-                Ui.showGoodbye(applications.size());
-                Ui.close();
+                try {
+                    Ui.showGoodbye(applications.size());
+                    Ui.close();
+                } catch (IllegalStateException e) {
+                    System.out.println("Scanner was already closed.");
+                }
                 return false;
 
             case HELP:

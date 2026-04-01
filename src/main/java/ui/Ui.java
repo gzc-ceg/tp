@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Ui {
     private static final Scanner scanner = new Scanner(System.in);
     private static final String HORIZONTAL_LINE =
-            "____________________________________________________________";
+            "___________________________________________________________________";
 
     /**
      * Reads a command entered by the user from the console.
@@ -150,7 +150,6 @@ public class Ui {
             System.out.println("Found " + results.size() + " application(s) with status '" + status + "':");
             showApplicationList(results);
         }
-
         System.out.println(HORIZONTAL_LINE);
     }
 
@@ -202,7 +201,7 @@ public class Ui {
                 add c/COMPANY p/POSITION d/DATE                             Add a new job application
                 edit INDEX [c/COMPANY] [p/POSITION] [d/DATE] [s/STATUS]     Edit existing application
                 delete INDEX                                                Delete an application
-                status INDEX set/STATUS note/NOTE                           Update  application status and add a note
+                status INDEX set/STATUS note/NOTE                           Update application status and add a note
                 filter s/STATUS                                             Filter applications by status
                 tag INDEX add/TAG                                           Add a tag to an application
                 tag INDEX remove/TAG                                        Remove a tag from an application
@@ -218,8 +217,6 @@ public class Ui {
 
     /**
      * Closes the scanner used for reading user input.
-     *
-     * @throws IllegalStateException if the scanner is already closed.
      */
     public static void close() {
         scanner.close();
