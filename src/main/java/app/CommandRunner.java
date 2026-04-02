@@ -149,46 +149,6 @@ public class CommandRunner {
     }
 
     /**
-     * Handles multi-field search (Company, Position, Status).
-     */
-    private void handleSearch(String type, String query) {
-        if (applications.isEmpty()) {
-            Ui.showError("No applications to search!");
-            return;
-        }
-
-        String keyword = query != null ? query.toLowerCase() : "";
-        if (keyword.isEmpty()) {
-            Ui.showError("Please enter a valid search term.");
-            return;
-        }
-
-        ArrayList<Application> results = new ArrayList<>();
-        for (Application app : applications) {
-            String fieldToSearch;
-            switch (type != null ? type : "c") {
-            case "p":
-                fieldToSearch = app.getPosition();
-                break;
-            case "s":
-                fieldToSearch = app.getStatus();
-                break;
-            case "c":
-            default:
-                fieldToSearch = app.getCompany();
-                break;
-            }
-
-            if (fieldToSearch.toLowerCase().contains(keyword)) {
-                results.add(app);
-            }
-        }
-
-        Collections.sort(results);
-        Ui.showSearchResults(results, type + "/" + query);
-    }
-
-    /**
      * Handles Status and Notes updates with defensive index checks.
      */
     private void handleStatusUpdate(ParsedCommand cmd) {
@@ -219,23 +179,34 @@ public class CommandRunner {
         }
 
         ArrayList<Application> results = new ArrayList<>();
-        String lowerQuery = query.toLowerCase();
+        String lowerQuery = (query != null) ? query.toLowerCase() : "";
 
         for (Application app : applications) {
             boolean isMatch = false;
-            if (type == null || type.equals("c")) {
+            // Default to company search if type is null
+            String searchType = (type != null) ? type : "c";
+
+            switch (searchType) {
+            case "c":
                 isMatch = app.getCompany().toLowerCase().contains(lowerQuery);
-            } else if (type.equals("p")) {
+                break;
+            case "p":
                 isMatch = app.getPosition().toLowerCase().contains(lowerQuery);
-            } else if (type.equals("s")) {
+                break;
+            case "s":
                 isMatch = app.getStatus().toLowerCase().contains(lowerQuery);
+                break;
+            default:
+                isMatch = app.getCompany().toLowerCase().contains(lowerQuery);
             }
 
             if (isMatch) {
                 results.add(app);
             }
         }
-        Ui.showSearchResults(results, query);
+
+        Collections.sort(results); // Ensures consistent output for tests
+        Ui.showSearchResults(results, (type != null ? type : "c") + "/" + query);
     }
 
     /**
