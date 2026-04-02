@@ -11,7 +11,9 @@ import java.util.logging.Logger;
  * Supports flexible ordering: status INDEX [set/STATUS] [note/NOTE]
  */
 public class StatusParser {
-
+    static {
+        Logger.getLogger(StatusParser.class.getName()).setLevel(Level.OFF);
+    }
     private static final Logger LOGGER = Logger.getLogger(StatusParser.class.getName());
 
     // Command and Prefix Constants

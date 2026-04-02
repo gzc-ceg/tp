@@ -171,6 +171,7 @@ public class CommandRunner {
 
     /**
      * Handles searching with a safety check for empty lists.
+     * Synchronized with team prefix requirements (c/, p/, s/).
      */
     private void handleSearch(String type, String query) {
         if (applications.isEmpty()) {
@@ -183,7 +184,6 @@ public class CommandRunner {
 
         for (Application app : applications) {
             boolean isMatch = false;
-            // Default to company search if type is null
             String searchType = (type != null) ? type : "c";
 
             switch (searchType) {
@@ -205,8 +205,10 @@ public class CommandRunner {
             }
         }
 
-        Collections.sort(results); // Ensures consistent output for tests
-        Ui.showSearchResults(results, (type != null ? type : "c") + "/" + query);
+        Collections.sort(results);
+        // Formatting search result output string to match EXPECTED.TXT requirements
+        String searchLabel = (type != null ? type : "c") + "/" + query;
+        Ui.showSearchResults(results, searchLabel);
     }
 
     /**
