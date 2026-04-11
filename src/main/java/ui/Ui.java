@@ -208,7 +208,7 @@ public class Ui {
                 tag INDEX remove/TAG                                        Remove a tag from an application
                 list                                                        List all job applications
                 sort                                                        Sort applications by date
-                search [c/COMPANY] [p/POSITION] [s/STATUS]                  Search applications
+                search [c/COMPANY] / [p/POSITION] / [s/STATUS]              Search applications
                 help                                                        Show this message
                 bye                                                         Exit the application""";
 
