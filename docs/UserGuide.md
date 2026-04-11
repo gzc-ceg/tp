@@ -22,21 +22,17 @@ Format: `help`
 
 Example output:
 
+Note: only a portion of the message is shown for brevity.
+
 ```text
 Available Commands:
-add c/COMPANY p/POSITION d/DATE                             Add a new job application
-edit INDEX [c/COMPANY] [p/POSITION] [d/DATE] [s/STATUS]     Edit existing application
-delete INDEX                                                Delete an application
-status INDEX [s/STATUS] [note/NOTE]                         Update application status and add a note
-filter s/STATUS                                             Filter applications by status
-tag INDEX add/TAG                                           Add a tag to an application
-tag INDEX remove/TAG                                        Remove a tag from an application
-list                                                        List all job applications
-sort                                                        Sort applications by date
-search [c/COMPANY] / [p/POSITION] / [s/STATUS]              Search applications
-help                                                        Show this message
-bye                                                         Exit the application
-___________________________________________________________________
+add c/COMPANY p/POSITION d/DATE         Add a new job application
+edit INDEX [...]                        Edit existing application
+delete INDEX                            Delete an application
+...
+help                                    Show this message
+bye                                     Exit the application
+____________________________________________________
 ```
 
 ### Adding an application: add
@@ -282,6 +278,6 @@ ___________________________________________________________________
 | Tag Remove | `tag INDEX remove/TAG` <br> e.g., `tag 1 remove/Tech`                                                                 |
 | List | `list`                                                                                                                |
 | Sort | `sort`                                                                                                                |
-| Search | `search [c/company] / [p/position] / [s/status]` <br> e.g., `search c/Google`                                         |
+| Search | `search c/COMPANY` <br> `search p/POSITION` <br> `search s/STATUS` <br> e.g., `search c/Google` |                                |
 | Help | `help`                                                                                                                |
 | Exit | `bye`                                                                                                                 |
