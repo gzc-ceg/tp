@@ -15,12 +15,11 @@ import java.util.logging.Logger;
  */
 public class FilterParser {
 
-
     private static final Logger LOGGER = Logger.getLogger(FilterParser.class.getName());
 
     static {
-        LOGGER.setLevel(Level.OFF); // Completely silence the logger for console output
-        LOGGER.setUseParentHandlers(false); // Prevent logs from bubbling up to the console handler
+        LOGGER.setLevel(Level.OFF);
+        LOGGER.setUseParentHandlers(false);
     }
 
     private static final String COMMAND_WORD = "filter";
@@ -45,8 +44,6 @@ public class FilterParser {
 
         String argumentBlock = extractArgumentBlock(trimmedInput);
 
-        // BUG FIX: Check if the arguments START with "s/"
-        // This prevents "filter abc s/Pending" from being accepted
         if (!argumentBlock.startsWith(PREFIX_STATUS)) {
             LOGGER.log(Level.WARNING, "Filter command has invalid text before prefix: " + argumentBlock);
             throw new JobPilotException(ERROR_INVALID_FORMAT);
