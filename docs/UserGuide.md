@@ -162,6 +162,8 @@ ___________________________________________________________________
 - Searches job applications by matching the company name
   or the position or the current status
 - Uses a **case-insensitive partial search**.
+- Search function only supports searching
+  by one dimension
 
 Format:
 - `search c/COMPANY_NAME`
