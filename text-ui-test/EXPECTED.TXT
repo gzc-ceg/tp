@@ -17,7 +17,13 @@ filter s/STATUS                                             Filter applications 
 tag INDEX add/TAG                                           Add a tag to an application
 tag INDEX remove/TAG                                        Remove a tag from an application
 list                                                        List all job applications
-sort                                                        Sort applications by date
+sort                                                        Sort applications by date (default)
+sort date                                                   Sort applications by date
+sort company                                                Sort applications by company
+sort status                                                 Sort applications by status
+sort date reverse                                           Sort applications by date (descending)
+sort company reverse                                        Sort applications by company (descending)
+sort status reverse                                         Sort applications by status (descending)
 search c/COMPANY                                            Search applications by company
 search p/POSITION                                           Search applications by position
 search s/STATUS                                             Search applications by status
@@ -74,7 +80,7 @@ Here are your applications:
 2. Google | SE manager | 2025-03-10 | OFFER (Note: Negotiate salary) | Tags: [TECH]
 3. Microsoft | SDE Intern | 2025-03-12 | PENDING (Note: Waiting for reply) | Tags: [TECH, INTERN]
 ___________________________________________________________________________
-Removed tag: /FINANCE -> Google | SE manager | 2025-03-10 | OFFER (Note: Negotiate salary) | Tags: [TECH]
+Tag not found on this application!
 ___________________________________________________________________________
 Deleted application:
 Amazon | Data Analyst | 2025-03-08 | INTERVIEW (Note: Case study prep) | Tags: [FINANCE, DATA]
