@@ -28,8 +28,12 @@ public class TaggerParser {
             throw new JobPilotException("Invalid index! Use a number.");
         }
 
-        int tagStartIndex = commandIndex + (isAdd ? 5 : 7);
+        // " add/" is 5 chars; " remove/" is 8 chars (leading space + "remove/")
+        int tagStartIndex = commandIndex + (isAdd ? 5 : 8);
         String tagStr = input.substring(tagStartIndex).trim();
+        if (tagStr.isEmpty()) {
+            throw new JobPilotException("Tag cannot be empty!");
+        }
         IndustryTag tag = new IndustryTag(tagStr);
 
         return new ParsedCommand(listIndex, tag, isAdd);

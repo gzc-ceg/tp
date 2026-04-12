@@ -262,11 +262,15 @@ public class CommandRunner {
 
         try {
             if (cmd.isAddTag()) {
-                target.addIndustryTag(cmd.getTag());
-                Ui.showTagAdded(cmd.getTag(), target);
-            } else {
-                target.removeIndustryTag(cmd.getTag());
+                if (target.addIndustryTag(cmd.getTag())) {
+                    Ui.showTagAdded(cmd.getTag(), target);
+                } else {
+                    Ui.showError("This application already has that tag.");
+                }
+            } else if (target.removeIndustryTag(cmd.getTag())) {
                 Ui.showTagRemoved(cmd.getTag(), target);
+            } else {
+                Ui.showError("Tag not found on this application!");
             }
         } catch (Exception e) {
             Ui.showError(e.getMessage());
