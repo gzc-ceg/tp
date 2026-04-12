@@ -130,14 +130,20 @@ public class Application implements Comparable<Application> {
         return company + " | " + position + " | " + getDate() + " | " + status + noteDisplay + tagDisplay;
     }
 
-    public void addIndustryTag(IndustryTag tag) {
+    /**
+     * @return true if the tag was newly added, false if it was already present
+     */
+    public boolean addIndustryTag(IndustryTag tag) {
         assert tag != null : "Tag cannot be null";
-        industryTags.add(tag);
+        return industryTags.add(tag);
     }
 
-    public void removeIndustryTag(IndustryTag tag) {
+    /**
+     * @return true if the tag was present and removed, false if it was not on this application
+     */
+    public boolean removeIndustryTag(IndustryTag tag) {
         assert tag != null : "Tag cannot be null";
-        industryTags.remove(tag);
+        return industryTags.remove(tag);
     }
 
     public Set<IndustryTag> getIndustryTags() {

@@ -110,9 +110,18 @@ class IndustryTagTest {
         Application app = new Application("Google", "SWE", "2025-01-01");
         IndustryTag tag = new IndustryTag("tech");
 
-        app.addIndustryTag(tag);
+        assertTrue(app.addIndustryTag(tag));
 
         assertTrue(app.getIndustryTags().contains(tag));
+        assertEquals(1, app.getIndustryTags().size());
+    }
+
+    @Test
+    void addIndustryTag_duplicate_returnsFalse() {
+        Application app = new Application("Google", "SWE", "2025-01-01");
+        IndustryTag tag = new IndustryTag("tech");
+        assertTrue(app.addIndustryTag(tag));
+        assertFalse(app.addIndustryTag(new IndustryTag("TECH")));
         assertEquals(1, app.getIndustryTags().size());
     }
 
@@ -122,10 +131,16 @@ class IndustryTagTest {
         IndustryTag tag = new IndustryTag("tech");
         app.addIndustryTag(tag);
 
-        app.removeIndustryTag(tag);
+        assertTrue(app.removeIndustryTag(tag));
 
         assertFalse(app.getIndustryTags().contains(tag));
         assertTrue(app.getIndustryTags().isEmpty());
+    }
+
+    @Test
+    void removeIndustryTag_whenAbsent_returnsFalse() {
+        Application app = new Application("Google", "SWE", "2025-01-01");
+        assertFalse(app.removeIndustryTag(new IndustryTag("tech")));
     }
 
     @Test
