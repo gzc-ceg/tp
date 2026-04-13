@@ -357,15 +357,19 @@ The following sequence diagram illustrates the flow of adding a tag to an applic
 
 ### Filter by Status Feature
 
-#### Implementation Details
+The Filter feature allows users to view a subset of applications based on their recruitment status. It employs case-insensitive partial matching to provide a flexible search experience.
 
-The **Filter by Status** mechanism allows users to retrieve a subset of applications matching a specific recruitment status. This feature is implemented using a dedicated `Filterer` utility class and a `FilterParser` sub-parser, following the **Separation of Concerns** principle used across other commands such as `delete` and `edit`.
+**Command Format**:
+- `filter s/STATUS`
 
-The operations are handled via the following methods:
-* `FilterParser#parse(String)` — Extracts and validates the status query from the raw input (e.g., extracts `OFFER` from `filter s/OFFER`), while enforcing correct prefix usage.
-* `Filterer#filterByStatus(ArrayList<Application>, String)` — Iterates through the application list and performs case-insensitive partial matching using `contains()`, before delegating results to the `Ui` component.
+**Example Usage**:
+- `filter s/OFFER` — Retrieves all applications with the status "OFFER".
+- `filter s/p` — Retrieves applications with statuses like "PENDING" or "PROCESSING".
 
----
+**Main Components**:
+- `Filterer` — A utility class containing the domain logic for list filtering.
+- `FilterParser` — Extracts the search query and ensures the mandatory `s/` prefix is present.
+- `Ui` — Handles the display of the filtered list or a "no matches" notification.
 
 #### Execution Summary
 
@@ -421,12 +425,19 @@ The following sequence diagram illustrates the flow of filtering applications by
 
 #### Implementation Details
 
-The **Status** feature is a core component of JobPilot that tracks an application's recruitment stage. This was enhanced with a **Notes** sub-feature to allow users to store specific feedback or interview details (e.g., salary negotiations) without cluttering the primary status field. Both fields operate independently, ensuring that updating one does not accidentally overwrite the other.
+The Status feature allows users to update the recruitment stage of a job application and attach independent notes. The implementation ensures that status and notes can be updated separately or simultaneously without overwriting existing data.
 
-The feature is managed through the following logic:
-- `Application` — Maintains two distinct fields: `status` (for progress tracking) and `notes` (for detailed feedback).
-- `StatusParser` — A specialized sub-parser that extracts the index and identifies the optional `s/` (status) and `note/` (notes) prefixes.
-- `CommandRunner` — Orchestrates the conditional update logic to ensure only the specified fields are modified.
+**Command Format**:
+- `status INDEX [s/STATUS] [note/NOTE]`
+
+**Example Usage**:
+- `status 1 s/OFFER note/Negotiate salary` — Updates both fields.
+- `status 2 s/REJECTED` — Updates only the status; previous notes are preserved.
+
+**Main Components**:
+- `Application` — Stores `status` and `notes` as separate String fields.
+- `StatusParser` — A specialized sub-parser that implements "Junk Zone" validation to ensure no unrecognized text exists between the index and prefixes.
+- `CommandRunner` — Orchestrates the conditional update logic, invoking setters only for the fields provided in the command.
 
 **Execution Flow:**
 
@@ -471,7 +482,8 @@ The following sequence diagram illustrates the integrated flow of updating statu
 | **Strict Junk Zone Validation**   | Prevents user ambiguity by ensuring all text following the index is associated with a valid prefix.                             |
 | **Dedicated Sub-Parser**          | Encapsulates complex prefix-searching logic (e.g., handling `note/` inside a status string) away from the main command routing. |
 
-## Product Sc
+## Product Scope
+
 ### Target User Profile
 Computing students applying for jobs and want to keep track of their applications.
 
