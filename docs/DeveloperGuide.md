@@ -84,37 +84,37 @@ The following diagram illustrates how the `CommandRunner` processes different co
 
 **Key Responsibilities:**
 
-| Responsibility | Description |
-|----------------|-------------|
-| **Command Routing** | Uses a switch statement to route `ParsedCommand` to the appropriate handler based on `CommandType` |
-| **Index Validation** | Validates that indexes are within bounds before passing to handlers |
-| **State Management** | Maintains the single source of truth for the application list |
-| **Error Handling** | Catches exceptions and delegates error display to `Ui` |
+| Responsibility       | Description                                                                                        |
+|----------------------|----------------------------------------------------------------------------------------------------|
+| **Command Routing**  | Uses a switch statement to route `ParsedCommand` to the appropriate handler based on `CommandType` |
+| **Index Validation** | Validates that indexes are within bounds before passing to handlers                                |
+| **State Management** | Maintains the single source of truth for the application list                                      |
+| **Error Handling**   | Catches exceptions and delegates error display to `Ui`                                             |
 
 **Command Types Handled:**
 
-| Command Type | Handler | Description |
-|--------------|---------|-------------|
-| `ADD` | `Application` constructor | Creates new application and adds to list |
-| `DELETE` | `Deleter` | Removes application from list |
-| `EDIT` | `Editor` | Updates fields of existing application |
-| `LIST` | `Ui.showApplicationList()` | Displays all applications |
-| `SORT` | `CommandRunner` + `Collections.sort()` | Sorts applications by date, company, or status (optional `reverse`) |
-| `SEARCH` | `CommandRunner` + `SearcherParser` | Case-insensitive partial match on company, position, or status |
-| `FILTER` | `Filterer` | Filters applications by status |
-| `STATUS` | `Application.setStatus()` / `setNotes()` | Updates status and/or notes |
-| `TAG` | `Application.addIndustryTag()` / `removeIndustryTag()` | Adds or removes industry tags |
-| `HELP` | `Ui.showHelp()` | Displays available commands |
-| `BYE` | None | Exits the application |
+| Command Type  | Handler                                                | Description                                                         |
+|---------------|--------------------------------------------------------|---------------------------------------------------------------------|
+| `ADD`         | `Application` constructor                              | Creates new application and adds to list                            |
+| `DELETE`      | `Deleter`                                              | Removes application from list                                       |
+| `EDIT`        | `Editor`                                               | Updates fields of existing application                              |
+| `LIST`        | `Ui.showApplicationList()`                             | Displays all applications                                           |
+| `SORT`        | `CommandRunner` + `Collections.sort()`                 | Sorts applications by date, company, or status (optional `reverse`) |
+| `SEARCH`      | `CommandRunner` + `SearcherParser`                     | Case-insensitive partial match on company, position, or status      |
+| `FILTER`      | `Filterer`                                             | Filters applications by status                                      |
+| `STATUS`      | `Application.setStatus()` / `setNotes()`               | Updates status and/or notes                                         |
+| `TAG`         | `Application.addIndustryTag()` / `removeIndustryTag()` | Adds or removes industry tags                                       |
+| `HELP`        | `Ui.showHelp()`                                        | Displays available commands                                         |
+| `BYE`         | None                                                   | Exits the application                                               |
 
 **Design Rationale:**
 
-| Decision | Rationale |
-|----------|-----------|
-| Centralized command routing | All commands flow through a single component, making the execution flow easy to trace |
-| Validation before delegation | Ensures invalid commands never reach domain logic, improving robustness |
-| Return boolean flag | Simple mechanism to control main loop continuation without exceptions |
-| Switch statement over mapping | Simple, readable, and sufficient for the number of command types |
+| Decision                      | Rationale                                                                             |
+|-------------------------------|---------------------------------------------------------------------------------------|
+| Centralized command routing   | All commands flow through a single component, making the execution flow easy to trace |
+| Validation before delegation  | Ensures invalid commands never reach domain logic, improving robustness               |
+| Return boolean flag           | Simple mechanism to control main loop continuation without exceptions                 |
+| Switch statement over mapping | Simple, readable, and sufficient for the number of command types                      |
 
 ## Implementation
 
@@ -127,12 +127,12 @@ The following diagram illustrates how the `CommandRunner` processes different co
 
 **Error Handling**
 
-| Error Scenario | Condition | User Response |
-|----------------|-----------|---------------|
-| Missing Index | User enters `edit` without a number | "Please provide an index. Example: edit 1 c/Google" |
-| Invalid Index | Index is 0, negative, or exceeds list size | "Invalid application number! You have X application(s)." |
-| No Fields | User provides index but no fields to update | "No valid fields to update! Use: c/, p/, d/, s/" |
-| Invalid Date Format | Date not in `YYYY-MM-DD` format | "Invalid date! Use YYYY-MM-DD (e.g., 2024-09-12)" |
+| Error Scenario      | Condition                                   | User Response                                            |
+|---------------------|---------------------------------------------|----------------------------------------------------------|
+| Missing Index       | User enters `edit` without a number         | "Please provide an index. Example: edit 1 c/Google"      |
+| Invalid Index       | Index is 0, negative, or exceeds list size  | "Invalid application number! You have X application(s)." |
+| No Fields           | User provides index but no fields to update | "No valid fields to update! Use: c/, p/, d/, s/"         |
+| Invalid Date Format | Date not in `YYYY-MM-DD` format             | "Invalid date! Use YYYY-MM-DD (e.g., 2024-09-12)"        |
 
 ### Delete Application Feature
 
@@ -216,26 +216,26 @@ The following diagram illustrates the case where no applications match the searc
 ---
 **Error Handling**
 
-| Error Scenario       | Condition                                      | User Response                                                |
-|---------------------|-----------------------------------------------|-------------------------------------------------------------|
-| Empty Search Term     | User enters `search c/`, `p/`, or `s/` without keyword | "Search value cannot be empty!"                              |
-| No Applications       | Application list is empty                     | "Application list is empty!"                                 |
-| No Match Found        | No application matches the keyword           | "No applications found matching '[type]/[keyword]'."         |
-| Invalid Format        | Input does not follow `search c/xxx`, `p/xxx`, or `s/xxx` | "Invalid format! Use: search c/xxx or p/xxx or s/xxx"        |
-| Invalid Search Type   | Type is not `c`, `p`, or `s`                 | "Invalid search type! Use c/, p/, or s/"                     |
+| Error Scenario       | Condition                                                 | User Response                                                |
+|----------------------|-----------------------------------------------------------|--------------------------------------------------------------|
+| Empty Search Term    | User enters `search c/`, `p/`, or `s/` without keyword    | "Search value cannot be empty!"                              |
+| No Applications      | Application list is empty                                 | "Application list is empty!"                                 |
+| No Match Found       | No application matches the keyword                        | "No applications found matching '[type]/[keyword]'."         |
+| Invalid Format       | Input does not follow `search c/xxx`, `p/xxx`, or `s/xxx` | "Invalid format! Use: search c/xxx or p/xxx or s/xxx"        |
+| Invalid Search Type  | Type is not `c`, `p`, or `s`                              | "Invalid search type! Use c/, p/, or s/"                     |
 
 ---
 
 **Design Rationale**
 
-| Decision                            | Rationale                                                                 |
-|------------------------------------|---------------------------------------------------------------------------|
+| Decision                            | Rationale                                                                    |
+|-------------------------------------|------------------------------------------------------------------------------|
 | Implement search in `CommandRunner` | Keeps parsing in `SearcherParser` and matching next to other list operations |
-| Support multiple search types       | Improves usability by allowing field-specific searches                  |
-| Case-insensitive matching           | Flexible input, user-friendly                                           |
-| Partial matching using `contains()` | Allows users to search with incomplete input                             |
-| Linear search on `ArrayList`        | Adequate for small datasets, simple to implement                         |
-| Direct result printing               | Simplifies control flow without extra layers                             |
+| Support multiple search types       | Improves usability by allowing field-specific searches                       |
+| Case-insensitive matching           | Flexible input, user-friendly                                                |
+| Partial matching using `contains()` | Allows users to search with incomplete input                                 |
+| Linear search on `ArrayList`        | Adequate for small datasets, simple to implement                             |
+| Direct result printing              | Simplifies control flow without extra layers                                 |
 
 ---
 
@@ -271,21 +271,21 @@ If tokens are invalid (e.g. `sort hi`), the method reports an error and leaves l
 
 #### Error Handling
 
-| Error Scenario | Condition | User Response |
-|----------------|----------|---------------|
-| No Applications | Application list is empty | "There is no application yet." |
-| Invalid sort field | e.g. `sort hi` | "Invalid sort field! Use: sort [date, company, or status] [reverse]" |
+| Error Scenario     | Condition                 | User Response                                                        |
+|--------------------|---------------------------|----------------------------------------------------------------------|
+| No Applications    | Application list is empty | "There is no application yet."                                       |
+| Invalid sort field | e.g. `sort hi`            | "Invalid sort field! Use: sort [date, company, or status] [reverse]" |
 
 ---
 
 #### Design Rationale
 
-| Decision | Rationale |
-|----------|----------|
-| Optional sort field | Matches User Guide; date remains the default when omitted |
-| Reverse keyword | Single consistent modifier instead of separate commands |
-| Sort in `CommandRunner` | Same list instance as other commands; no extra copies |
-| Use `Collections.sort` | Reliable and easy to maintain |
+| Decision                | Rationale                                                 |
+|-------------------------|-----------------------------------------------------------|
+| Optional sort field     | Matches User Guide; date remains the default when omitted |
+| Reverse keyword         | Single consistent modifier instead of separate commands   |
+| Sort in `CommandRunner` | Same list instance as other commands; no extra copies     |
+| Use `Collections.sort`  | Reliable and easy to maintain                             |
 
 ---
 
@@ -331,24 +331,24 @@ The following sequence diagram illustrates the flow of adding a tag to an applic
 
 #### Error Handling
 
-| Error Scenario | Condition | User Response |
-|----------------|-----------|---------------|
-| Missing index | User enters `tag add/TECH` without index | "Please provide an index. Example: tag 1 add/TECH" |
-| Invalid index | Index is 0, negative, or exceeds list size | "Invalid application number! You have X application(s)." |
-| Invalid format | Missing `add/` or `remove/` prefix | "Invalid tag format! Use: tag INDEX add/TAG or tag INDEX remove/TAG" |
-| Empty tag | User enters `tag 1 add/` | "Tag cannot be empty!" |
-| Duplicate tag | User adds a tag already on the application | "This application already has that tag." |
-| Remove non-existent tag | Tag not found on application | "Tag not found on this application!" |
+| Error Scenario          | Condition                                  | User Response                                                        |
+|-------------------------|--------------------------------------------|----------------------------------------------------------------------|
+| Missing index           | User enters `tag add/TECH` without index   | "Please provide an index. Example: tag 1 add/TECH"                   |
+| Invalid index           | Index is 0, negative, or exceeds list size | "Invalid application number! You have X application(s)."             |
+| Invalid format          | Missing `add/` or `remove/` prefix         | "Invalid tag format! Use: tag INDEX add/TAG or tag INDEX remove/TAG" |
+| Empty tag               | User enters `tag 1 add/`                   | "Tag cannot be empty!"                                               |
+| Duplicate tag           | User adds a tag already on the application | "This application already has that tag."                             |
+| Remove non-existent tag | Tag not found on application               | "Tag not found on this application!"                                 |
 
 #### Design Rationale
 
-| Decision | Rationale |
-|----------|----------|
+| Decision                      | Rationale                                                                       |
+|-------------------------------|---------------------------------------------------------------------------------|
 | Dedicated `IndustryTag` class | Encapsulates tag normalization logic (uppercase, trim) and ensures immutability |
-| Use `Set<IndustryTag>` | Automatically prevents duplicate tags |
-| Tag normalization (uppercase) | Ensures consistency and prevents case-sensitive duplicates |
-| `add/` and `remove/` syntax | Matches existing command patterns (`set/`, `note/`) |
-| Separate `TaggerParser` | Maintains separation of concerns and simplifies unit testing |
+| Use `Set<IndustryTag>`        | Automatically prevents duplicate tags                                           |
+| Tag normalization (uppercase) | Ensures consistency and prevents case-sensitive duplicates                      |
+| `add/` and `remove/` syntax   | Matches existing command patterns (`set/`, `note/`)                             |
+| Separate `TaggerParser`       | Maintains separation of concerns and simplifies unit testing                    |
 
 ### Filter by Status Feature
 
@@ -383,22 +383,22 @@ The following sequence diagram illustrates the flow of filtering applications by
 
 #### Design Rationale
 
-| Decision | Rationale |
-|----------|-----------|
-| **Separate `Filterer` Class** | Maintains the Single Responsibility Principle by isolating filtering logic from parsing and UI responsibilities, improving modularity and testability. |
+| Decision                                           | Rationale                                                                                                                                                                                              |
+|----------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Separate `Filterer` Class**                      | Maintains the Single Responsibility Principle by isolating filtering logic from parsing and UI responsibilities, improving modularity and testability.                                                 |
 | **Case-Insensitive Partial Matching (`contains`)** | Supports flexible "smart matching" behaviour, allowing partial inputs such as `off` to match `OFFER`, and `p` to match both `PENDING` and `PROCESSING`. This aligns with the User Guide specification. |
-| **Linear Scan over `ArrayList`** | Simple and efficient for the expected dataset size (≤ 500 applications), avoiding unnecessary complexity while maintaining acceptable performance. |
+| **Linear Scan over `ArrayList`**                   | Simple and efficient for the expected dataset size (≤ 500 applications), avoiding unnecessary complexity while maintaining acceptable performance.                                                     |
 
 ---
 
 #### Error Handling
 
-| Error Scenario | Condition | User Response |
-|----------------|-----------|---------------|
-| Missing Arguments | User enters `filter` alone | "Filter command is missing arguments! Use: filter s/STATUS" |
-| Missing Prefix | User enters `filter PENDING` | "Invalid filter format! Expected: filter s/STATUS" |
-| Empty Value | User enters `filter s/` | "The filter value cannot be empty! Please provide a status after 's/'." |
-| Format Violation | Junk text appears before `s/` | "Invalid filter format! Unexpected input before prefix." |
+| Error Scenario    | Condition                     | User Response                                                           |
+|-------------------|-------------------------------|-------------------------------------------------------------------------|
+| Missing Arguments | User enters `filter` alone    | "Filter command is missing arguments! Use: filter s/STATUS"             |
+| Missing Prefix    | User enters `filter PENDING`  | "Invalid filter format! Expected: filter s/STATUS"                      |
+| Empty Value       | User enters `filter s/`       | "The filter value cannot be empty! Please provide a status after 's/'." |
+| Format Violation  | Junk text appears before `s/` | "Invalid filter format! Unexpected input before prefix."                |
 
 ---
 
@@ -448,51 +448,25 @@ The following sequence diagram illustrates the integrated flow of updating statu
 
 #### Error Handling
 
-| Error Scenario | Condition | User Response |
-|----------------|-----------|---------------|
-| **Missing Index** | User enters `status s/OFFER` without index | "Please provide an index. Example: status 1 s/OFFER" |
-| **Invalid Index** | Index is 0, negative, or exceeds list size | "Invalid application number! You have X application(s)." |
-| **Junk Zone Text** | Unexpected text before prefixes (e.g., `status 1 updated s/OFFER`) | "Invalid format! Unexpected text before prefixes: updated" |
-| **Empty Status** | User enters `status 1 s/` | "Status value cannot be empty!" |
-| **Missing Arguments**| User enters `status 1` without prefixes | "No status or note provided! Use s/ or note/." |
+| Error Scenario        | Condition                                                          | User Response                                              |
+|-----------------------|--------------------------------------------------------------------|------------------------------------------------------------|
+| **Missing Index**     | User enters `status s/OFFER` without index                         | "Please provide an index. Example: status 1 s/OFFER"       |
+| **Invalid Index**     | Index is 0, negative, or exceeds list size                         | "Invalid application number! You have X application(s)."   |
+| **Junk Zone Text**    | Unexpected text before prefixes (e.g., `status 1 updated s/OFFER`) | "Invalid format! Unexpected text before prefixes: updated" |
+| **Empty Status**      | User enters `status 1 s/`                                          | "Status value cannot be empty!"                            |
+| **Missing Arguments** | User enters `status 1` without prefixes                            | "No status or note provided! Use s/ or note/."             |
 
 #### Design Rationale
 
-| Decision | Rationale |
-|----------|-----------|
-| **Primary Status Field** | Serves as the key metric for sorting and filtering; normalized to uppercase for consistent searching. |
-| **Independent Notes Sub-feature** | Decouples subjective user comments from objective recruitment stages, preventing data loss during status transitions. |
-| **Conditional Setter Execution** | By only calling setters for non-null `ParsedCommand` fields, the system supports partial updates, improving CLI efficiency. |
-| **Strict Junk Zone Validation** | Prevents user ambiguity by ensuring all text following the index is associated with a valid prefix. |
-| **Dedicated Sub-Parser** | Encapsulates complex prefix-searching logic (e.g., handling `note/` inside a status string) away from the main command routing. |
+| Decision                          | Rationale                                                                                                                       |
+|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| **Primary Status Field**          | Serves as the key metric for sorting and filtering; normalized to uppercase for consistent searching.                           |
+| **Independent Notes Sub-feature** | Decouples subjective user comments from objective recruitment stages, preventing data loss during status transitions.           |
+| **Conditional Setter Execution**  | By only calling setters for non-null `ParsedCommand` fields, the system supports partial updates, improving CLI efficiency.     |
+| **Strict Junk Zone Validation**   | Prevents user ambiguity by ensuring all text following the index is associated with a valid prefix.                             |
+| **Dedicated Sub-Parser**          | Encapsulates complex prefix-searching logic (e.g., handling `note/` inside a status string) away from the main command routing. |
 
-#### Sequence Diagram
-
-The following sequence diagram illustrates the flow of updating status and notes:
-
-![Status Sequence Diagram](diagrams/status/sequence.png)
-
-#### Error Handling
-
-| Error Scenario | Condition                                | User Response |
-|----------------|------------------------------------------|---------------|
-| Missing index | User enters `status s/OFFER` without index | "Please provide an index. Example: status 1 s/OFFER" |
-| Invalid index | Index out of range                       | "Invalid application number! You have X application(s)." |
-| Invalid format | Missing `s/` or incorrectly formatted    | "No status or note provided! Use s/ or note/." (or related format errors from `StatusParser`) |
-| Empty status | User enters `status 1 s/`                | "Status cannot be empty!" |
-| Both fields missing | User enters `status 1`                   | "No status or note provided! Use s/ or note/." |
-
-#### Design Rationale
-
-| Decision | Rationale |
-|-------------------------------------|----------|
-| Separate `status` and `notes` fields | Improves data clarity and allows independent updates to application progress and feedback without overwriting existing information |
-| Optional `note/` field | Allows users to update either status, notes, or both in a single command, improving flexibility |
-| Dedicated `StatusParser` | Ensures parsing logic for `status` commands is isolated from other command types, improving maintainability and testability |
-| Flexible prefix ordering (`s/` and `note/`) | Supports user-friendly input where the order of fields does not matter (e.g., `s/OFFER note/X` or `note/X s/OFFER`) |
-| Consistent prefix-based syntax | Aligns with existing command design (`c/`, `p/`, `d/`, `s/`, `note/`) for a uniform CLI experience |
-
-## Product Scope
+## Product Sc
 ### Target User Profile
 Computing students applying for jobs and want to keep track of their applications.
 
@@ -502,18 +476,18 @@ tracker to allow users to get a bird's eye view of all their applications and ma
 
 ## User Stories
 
-| Version | As a ... | I want to ...                                                     | So that I can ...                      |
-|------|----------|-------------------------------------------------------------------|----------------------------------------|
-| v1.0 | user | add a job application with company, position, and submission date | keep track of where I have applied     |
-| v1.0 | user | list all my applications                                          | see a summary of my applications       |
-| v1.0 | user | delete applications                                               | manage my application list effectively |
-| v1.0 | user | update application status                                         | track my application progress          |
-| v1.0 | user | sort applications by submission date                              | prioritize older applications          |
-| v2.0 | user | store my applications persistently | come back to it at different points in time                |
-| v2.0 | user | edit an existing application | update details without deleting and re-adding applications |
-| v2.0 | user | search applications by company name | locate applications for specific companies                 |
-| v2.0 | user | add industry tags to applications | categorize applications by industry                        |
-| v2.0 | user | filter applications by status | focus on applications at a specific stage                  |
+| Version | As a ...  | I want to ...                                                      | So that I can ...                                          |
+|---------|-----------|--------------------------------------------------------------------|------------------------------------------------------------|
+| v1.0    | user      | add a job application with company, position, and submission date  | keep track of where I have applied                         |
+| v1.0    | user      | list all my applications                                           | see a summary of my applications                           |
+| v1.0    | user      | delete applications                                                | manage my application list effectively                     |
+| v1.0    | user      | update application status                                          | track my application progress                              |
+| v1.0    | user      | sort applications by submission date                               | prioritize older applications                              |
+| v2.0    | user      | store my applications persistently                                 | come back to it at different points in time                |
+| v2.0    | user      | edit an existing application                                       | update details without deleting and re-adding applications |
+| v2.0    | user      | search applications by company name                                | locate applications for specific companies                 |
+| v2.0    | user      | add industry tags to applications                                  | categorize applications by industry                        |
+| v2.0    | user      | filter applications by status                                      | focus on applications at a specific stage                  |
 
 ## Non-Functional Requirements
 
@@ -563,37 +537,50 @@ tracker to allow users to get a bird's eye view of all their applications and ma
 
 ### Search by Company Feature Testing
 
-| Test | Command | Expected |
-|------|--------|----------|
-| No match | `search c/Microsoft` | Prints "No applications found matching 'c/microsoft'." |
-| Single match | `search c/Google` | Shows 1 result matching `c/google` |
-| Partial match | `search c/Go` | Shows applications whose company contains `go` |
-| Case insensitive | `search c/GOOGLE` | Matches `Google` successfully |
-| Empty search term | `search c/` | Error: "Search value cannot be empty!" |
-| Empty list | `search c/Google` (no applications) | "Application list is empty!" |
+| Test              | Command                             | Expected                                               |
+|-------------------|-------------------------------------|--------------------------------------------------------|
+| No match          | `search c/Microsoft`                | Prints "No applications found matching 'c/microsoft'." |
+| Single match      | `search c/Google`                   | Shows 1 result matching `c/google`                     |
+| Partial match     | `search c/Go`                       | Shows applications whose company contains `go`         |
+| Case insensitive  | `search c/GOOGLE`                   | Matches `Google` successfully                          |
+| Empty search term | `search c/`                         | Error: "Search value cannot be empty!"                 |
+| Empty list        | `search c/Google` (no applications) | "Application list is empty!"                           |
+
+### Application Status and Notes testing
+
+| Test Case              | Command                               | Expected Result                                                      |
+|------------------------|---------------------------------------|----------------------------------------------------------------------|
+| **Update Both Fields** | `status 1 s/OFFER note/High priority` | Both fields update. Output: `OFFER (Note: High priority)`            |
+| **Status Only**        | `status 1 s/INTERVIEW`                | Status becomes `INTERVIEW`; **existing notes are preserved.**        |
+| **Notes Only**         | `status 1 note/Follow up Monday`      | Note updates; **existing status remains unchanged.**                 |
+| **Junk Text Check**    | `status 1 update s/OFFER`             | **Error:** `Invalid format! Unexpected text before prefixes: update` |
+| **Empty Value**        | `status 1 s/`                         | **Error:** `Status value cannot be empty!`                           |
+| **Missing Index**      | `status s/OFFER`                      | **Error:** `Please provide an index. Example: status 1 s/OFFER`      |
+| **Missing Prefixes**   | `status 1`                            | **Error:** `No status or note provided! Use s/ or note/.`            |
+| **Invalid Index**      | `status 999 s/OA`                     | **Error:** `Invalid application number! You have X application(s).`  |
 
 ### Filter by Status Feature Testing
 
-| Test | Command | Expected |
-|------|---------|----------|
-| Exact match | `filter s/OFFER` | Shows only applications with status "OFFER" |
-| Case insensitive | `filter s/offer` | Matches "OFFER" successfully |
-| Partial match | `filter s/PEND` | Matches "PENDING" successfully |
-| No match | `filter s/REJECTED` | Prints a no-match style message from the filter flow |
-| Empty list | `filter s/OFFER` | Prints "There is no application yet." |
+| Test             | Command             | Expected                                             |
+|------------------|---------------------|------------------------------------------------------|
+| Exact match      | `filter s/OFFER`    | Shows only applications with status "OFFER"          |
+| Case insensitive | `filter s/offer`    | Matches "OFFER" successfully                         |
+| Partial match    | `filter s/PEND`     | Matches "PENDING" successfully                       |
+| No match         | `filter s/REJECTED` | Prints a no-match style message from the filter flow |
+| Empty list       | `filter s/OFFER`    | Prints "There is no application yet."                |
 
 ### Delete Feature Testing
 
-| Test | Command | Expected |
-|---|---|---|
-| Valid delete | `delete 1` | First application removed from list. Deleted application details and remaining count shown. `JobPilotData.txt` updated. |
-| Invalid index | `delete 0` | `JobPilotException` thrown indicating invalid index. No deletion occurs. Storage remains unchanged. |
-| Missing index | `delete` | `JobPilotException` thrown indicating invalid index. No deletion occurs. Data file remains unchanged. |
-| Non-numeric index | `delete abc` | `JobPilotException` thrown due to non-numeric input. No deletion occurs. Storage remains consistent. |
-| Index out of range | `delete N+1` | `JobPilotException` thrown indicating index is out of bounds. No deletion occurs. Data file remains unchanged. |
+| Test               | Command      | Expected                                                                                                                |
+|--------------------|--------------|-------------------------------------------------------------------------------------------------------------------------|
+| Valid delete       | `delete 1`   | First application removed from list. Deleted application details and remaining count shown. `JobPilotData.txt` updated. |
+| Invalid index      | `delete 0`   | `JobPilotException` thrown indicating invalid index. No deletion occurs. Storage remains unchanged.                     |
+| Missing index      | `delete`     | `JobPilotException` thrown indicating invalid index. No deletion occurs. Data file remains unchanged.                   |
+| Non-numeric index  | `delete abc` | `JobPilotException` thrown due to non-numeric input. No deletion occurs. Storage remains consistent.                    |
+| Index out of range | `delete N+1` | `JobPilotException` thrown indicating index is out of bounds. No deletion occurs. Data file remains unchanged.          |
 
 ### Storage Feature Testing
 
-| Test | Action | Expected                                                                                                                                               |
-|---|---|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Test                    | Action                                     | Expected                                                                                                                                               |
+|-------------------------|--------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Save after modification | Perform `add`, `edit`, or `delete` command | `Storage.saveToFile()` is called. `JobPilotData.txt` is updated with the latest application list. On next launch, the list reflects all modifications. |
