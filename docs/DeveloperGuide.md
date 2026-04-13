@@ -502,7 +502,7 @@ The following sequence diagram illustrates the flow of updating status and notes
 Computing students applying for jobs and want to keep track of their applications.
 
 ### Value Proposition
-In the current job market, applying to many roles has become the norm. As such, JobPilot acts a
+In the current job market, applying to many roles has become the norm. As such, JobPilot acts as a
 tracker to allow users to get a bird's eye view of all their applications and manage them effectively.
 
 ## User Stories
@@ -523,7 +523,7 @@ tracker to allow users to get a bird's eye view of all their applications and ma
 ## Non-Functional Requirements
 
 ### 1. Performance
-- The application shall respond to any command (add, edit, delete, search, sort, tag, status) within **1 second** for up to **500 job applications**.
+- The application shall respond to any command within **1 second** for up to **500 job applications**.
 - Searching, sorting, and filtering operations shall execute in **O(n)** time complexity or better, where n is the number of applications.
 
 ### 2. Usability
@@ -535,7 +535,7 @@ tracker to allow users to get a bird's eye view of all their applications and ma
 - Messages shall be concise, avoiding technical jargon when addressing end users.
 
 ### 4. OS Requirement
-- Shall work on any mainstream OS as long as it has Java 17 or above installed.
+- Shall work on any mainstream OS as long as it has Java 17 installed.
 
 ## Glossary
 
@@ -589,16 +589,16 @@ tracker to allow users to get a bird's eye view of all their applications and ma
 
 ### Delete Feature Testing
 
-| Test | Command | Expected |
-|---|---|---|
-| Valid delete | `delete 1` | First application removed from list. Deleted application details and remaining count shown. |
-| Invalid index | `delete 0` | `JobPilotException` thrown indicating invalid index. No deletion occurs. Storage remains unchanged. |
-| Missing index | `delete` | `JobPilotException` thrown indicating invalid index. No deletion occurs. Data file remains unchanged. |
-| Non-numeric index | `delete abc` | `JobPilotException` thrown due to non-numeric input. No deletion occurs. Storage remains consistent. |
+| Test | Command | Expected                                                                                                       |
+|---|---|----------------------------------------------------------------------------------------------------------------|
+| Valid delete | `delete 1` | First application removed from list. Deleted application details and remaining count shown.                    |
+| Invalid index | `delete 0` | `JobPilotException` thrown indicating invalid index. No deletion occurs. Data file remains unchanged.          |
+| Missing index | `delete` | `JobPilotException` thrown indicating invalid index. No deletion occurs. Data file remains unchanged.          |
+| Non-numeric index | `delete abc` | `JobPilotException` thrown due to non-numeric input. No deletion occurs. Data file remains consistent.         |
 | Index out of range | `delete N+1` | `JobPilotException` thrown indicating index is out of bounds. No deletion occurs. Data file remains unchanged. |
 
 ### Storage Feature Testing
 
-| Test | Action | Expected                                                                                                                                                |
-|---|---|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Save after modification | Perform `add`, `edit`, or `delete` command | `Storage.saveToFile()` is called. `JobPilotData.json` is updated with the latest application list. On next launch, the list reflects all modifications. |
+| Test | Action | Expected                                                                                                                                                  |
+|---|---|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Save after modification | Perform `add`, `edit`, or `delete` command | `Storage.saveToFile()` is called. `JobPilotData.json` is updated with the latest application list. On next launch, the list reflects these modifications. |
